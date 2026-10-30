@@ -1,0 +1,946 @@
+/* ==========================================================================
+   Bang Times — Complete Stylesheet (app.css)
+   ========================================================================== */
+
+:root {
+  --bg-deep: #040507;
+  --bg-panel: rgba(13, 17, 24, 0.78);
+  --bg-panel-strong: rgba(10, 13, 19, 0.92);
+  --brass-100: #fff3d1;
+  --brass-200: #ffe8a3;
+  --brass-300: #d49b43;
+  --brass-400: #8f6122;
+  --brass-border: rgba(246, 230, 193, 0.18);
+  --brass-border-bright: rgba(255, 232, 163, 0.45);
+  --teal-accent: #2dd4bf;
+  --teal-glow: rgba(45, 212, 191, 0.25);
+  --crimson-alert: #f59e0b;
+  --text-muted: rgba(246, 230, 193, 0.65);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+html {
+  width: 100%;
+  min-height: 100dvh;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior-y: none;
+  background-color: #040507 !important;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  width: 100%;
+  min-height: 100dvh;
+  height: auto;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior-y: none;
+  touch-action: pan-y;
+  background-color: #040507 !important;
+  background-image:
+    radial-gradient(circle at 50% 22%, rgba(212, 155, 67, 0.12) 0%, transparent 55%),
+    radial-gradient(circle at 50% 85%, rgba(45, 212, 191, 0.05) 0%, transparent 60%),
+    linear-gradient(180deg, #07090e 0%, #040507 100%);
+  color: var(--brass-100);
+  font-family: "Noto Naskh Arabic", "Amiri", "Cinzel", serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+  padding-top: max(8px, env(safe-area-inset-top));
+  padding-bottom: max(14px, env(safe-area-inset-bottom));
+  padding-left: max(10px, env(safe-area-inset-left));
+  padding-right: max(10px, env(safe-area-inset-right));
+}
+
+/* ==========================================================================
+   ١. باکگراوندی تەونی جاڵجاڵۆکە و دەزووەکەی سەرەوە
+   ========================================================================== */
+
+.bg-backdrop {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.bg-web-svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+  opacity: 0.72;
+}
+
+.web-base-group path,
+.web-base-group line,
+.web-base-group circle {
+  fill: none;
+  stroke: rgba(246, 230, 193, 0.08);
+  stroke-width: 0.85;
+}
+
+.web-glow-group path,
+.web-glow-group line {
+  fill: none;
+  stroke: url(#webSilkGlow);
+  stroke-width: 1.35;
+  stroke-linecap: round;
+  filter: drop-shadow(0 0 4px rgba(255, 232, 163, 0.35));
+}
+
+.vline {
+  position: fixed;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 1.2px;
+  height: 22vh;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 243, 209, 0.55) 0%,
+    rgba(212, 155, 67, 0.28) 70%,
+    transparent 100%
+  );
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* ==========================================================================
+   ٢. مینیۆی سێ خەت (گۆشەی سەرەوە)، هەڵبژاردنی شارەکان و دەنگەکانی بانگ
+   ========================================================================== */
+
+.corner-menu-wrapper {
+  position: fixed;
+  top: max(14px, env(safe-area-inset-top));
+  right: max(14px, env(safe-area-inset-right));
+  z-index: 1000;
+}
+
+.hamburger-btn {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  background: rgba(15, 19, 28, 0.82);
+  border: 1px solid var(--brass-border);
+  box-shadow:
+    0 4px 14px rgba(0, 0, 0, 0.65),
+    inset 0 1px 0 rgba(255, 243, 209, 0.12);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.hamburger-btn:hover,
+.hamburger-btn.active {
+  border-color: var(--brass-border-bright);
+  box-shadow:
+    0 0 14px rgba(212, 155, 67, 0.28),
+    inset 0 1px 0 rgba(255, 243, 209, 0.22);
+}
+
+.hamburger-btn .bar {
+  width: 20px;
+  height: 2px;
+  background: linear-gradient(90deg, var(--brass-100), var(--brass-300));
+  border-radius: 2px;
+  transition: transform 0.28s ease, opacity 0.2s ease;
+}
+
+.hamburger-btn.active .bar:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+
+.hamburger-btn.active .bar:nth-child(2) {
+  opacity: 0;
+}
+
+.hamburger-btn.active .bar:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+.menu-dropdown-panel {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  width: 276px;
+  max-height: 82dvh;
+  overflow-y: auto;
+  background: var(--bg-panel-strong);
+  border: 1px solid var(--brass-border-bright);
+  border-radius: 14px;
+  padding: 14px;
+  box-shadow:
+    0 14px 34px rgba(0, 0, 0, 0.85),
+    0 0 20px rgba(212, 155, 67, 0.15);
+  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-8px) scale(0.96);
+  transform-origin: top right;
+  transition: all 0.24s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.menu-dropdown-panel.open {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0) scale(1);
+}
+
+.menu-panel-header {
+  padding-bottom: 8px;
+  margin-bottom: 10px;
+  border-bottom: 1px solid rgba(246, 230, 193, 0.14);
+  text-align: right;
+}
+
+.menu-panel-title {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--brass-200);
+}
+
+.menu-option-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.menu-sound-group {
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(246, 230, 193, 0.14);
+}
+
+.menu-option-label {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  text-align: right;
+}
+
+.city-select {
+  display: none !important;
+}
+
+.custom-city-select {
+  position: relative;
+  width: 100%;
+  font-family: "Noto Naskh Arabic", sans-serif;
+}
+
+.custom-city-trigger {
+  width: 100%;
+  padding: 9px 12px;
+  border-radius: 9px;
+  background: rgba(6, 8, 13, 0.95);
+  border: 1px solid rgba(246, 230, 193, 0.38);
+  color: var(--brass-100);
+  font-family: "Noto Naskh Arabic", sans-serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  cursor: pointer;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.custom-city-trigger span:first-child {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.custom-city-trigger:hover,
+.custom-city-select.open .custom-city-trigger {
+  border-color: var(--brass-200);
+  box-shadow: 0 0 10px rgba(255, 232, 163, 0.25);
+}
+
+.custom-city-arrow {
+  font-size: 0.72rem;
+  color: var(--brass-200);
+  flex-shrink: 0;
+  transition: transform 0.25s ease;
+}
+
+.custom-city-select.open .custom-city-arrow {
+  transform: rotate(180deg);
+}
+
+.custom-city-list {
+  margin-top: 8px;
+  display: none;
+  flex-direction: column;
+  gap: 6px;
+  max-height: 310px;
+  overflow-y: auto;
+  padding-top: 2px;
+}
+
+.custom-city-select.open .custom-city-list {
+  display: flex;
+}
+
+.custom-city-option {
+  width: 100%;
+  padding: 8px 11px;
+  border-radius: 9px;
+  background: rgba(6, 8, 13, 0.95);
+  border: 1px solid rgba(246, 230, 193, 0.25);
+  color: var(--brass-100);
+  font-family: "Noto Naskh Arabic", sans-serif;
+  font-size: 0.88rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: right;
+}
+
+.custom-city-option:hover {
+  border-color: var(--brass-200);
+  background: rgba(16, 20, 30, 0.98);
+}
+
+.custom-city-option.selected {
+  border-color: var(--brass-200);
+  background: linear-gradient(135deg, rgba(32, 23, 8, 0.96), rgba(8, 11, 18, 0.96));
+  color: var(--brass-200);
+  box-shadow: 0 0 10px rgba(212, 155, 67, 0.22);
+}
+
+.custom-city-option .option-content {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  min-width: 0;
+  text-align: right;
+}
+
+.custom-city-option .option-content span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.option-actions {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  flex-shrink: 0;
+}
+
+/* دوگمەی زێڕینی Play / Stop بە ئایکۆنی SVG */
+.sound-preview-btn {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: linear-gradient(145deg, rgba(32, 24, 10, 0.95), rgba(10, 13, 20, 0.95));
+  border: 1px solid rgba(255, 232, 163, 0.45);
+  color: var(--brass-200);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0;
+  outline: none;
+  box-shadow:
+    0 2px 6px rgba(0, 0, 0, 0.6),
+    inset 0 1px 0 rgba(255, 243, 209, 0.18);
+  transition: all 0.22s ease;
+  flex-shrink: 0;
+}
+
+.sound-preview-btn svg {
+  width: 12px;
+  height: 12px;
+  fill: currentColor;
+  display: block;
+  pointer-events: none;
+}
+
+.sound-preview-btn:hover {
+  border-color: var(--brass-100);
+  color: var(--brass-100);
+  box-shadow: 0 0 10px rgba(255, 232, 163, 0.35);
+  transform: scale(1.06);
+}
+
+.sound-preview-btn.playing {
+  background: linear-gradient(145deg, rgba(212, 155, 67, 0.35), rgba(20, 48, 44, 0.92));
+  border-color: var(--teal-accent);
+  color: #ffffff;
+  box-shadow:
+    0 0 12px var(--teal-glow),
+    inset 0 0 8px rgba(45, 212, 191, 0.25);
+  animation: previewPulse 1.4s infinite ease-in-out;
+}
+
+@keyframes previewPulse {
+  0%, 100% {
+    box-shadow: 0 0 8px rgba(45, 212, 191, 0.3), inset 0 0 6px rgba(255, 232, 163, 0.2);
+  }
+  50% {
+    box-shadow: 0 0 16px rgba(45, 212, 191, 0.65), inset 0 0 10px rgba(255, 232, 163, 0.4);
+  }
+}
+
+.custom-city-check {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--brass-200);
+  width: 14px;
+  text-align: center;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.custom-city-option.selected .custom-city-check {
+  opacity: 1;
+}
+
+.athan-prayers-wrapper {
+  display: none;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px dashed rgba(246, 230, 193, 0.16);
+}
+
+.athan-prayers-wrapper.visible {
+  display: flex;
+}
+
+.athan-sub-label {
+  font-size: 0.76rem;
+  color: var(--brass-200);
+}
+
+.athan-prayers-list {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+/* ==========================================================================
+   ٣. دەمژمێری ئەنالۆگی جاڵجاڵۆکە (Analog Spider Clock)
+   ========================================================================== */
+
+.clock-stage {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  margin-top: 2px;
+  margin-bottom: 4px;
+  flex-shrink: 0;
+}
+
+.clock-stage .dial {
+  width: min(74vw, 310px);
+  height: min(74vw, 310px);
+  max-width: 310px;
+  max-height: 310px;
+  overflow: visible;
+  filter: drop-shadow(0 12px 28px rgba(0, 0, 0, 0.85));
+}
+
+#numerals text {
+  font-family: "Cormorant Upright", "Cinzel", serif;
+  font-weight: 700;
+  font-style: italic;
+  fill: url(#numeralGold);
+  text-anchor: middle;
+  dominant-baseline: central;
+  pointer-events: none;
+}
+
+#gears path,
+#gears circle,
+#gears g {
+  pointer-events: none;
+}
+
+/* ==========================================================================
+   ٤. داشبۆردی کاتەکانی بانگ و ئەزکار (Prayer Dashboard)
+   ========================================================================== */
+
+.prayer-dashboard {
+  position: relative;
+  z-index: 5;
+  width: 100%;
+  max-width: 440px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0 auto;
+  flex-shrink: 0;
+}
+
+/* --------------------------------------------------------------------------
+   ٤.١ لاکێشەی ئەزکار و بەرواری کۆچی (.top-meta-bar)
+   -------------------------------------------------------------------------- */
+
+.top-meta-bar {
+  position: relative;
+  width: 100%;
+  min-height: 118px;
+  height: auto;
+  padding: 8px 12px 12px;
+  background: var(--bg-panel);
+  border: 1px solid var(--brass-border);
+  border-radius: 14px;
+  box-shadow:
+    0 8px 24px rgba(0, 0, 0, 0.65),
+    inset 0 1px 0 rgba(255, 243, 209, 0.08);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow: hidden;
+}
+
+.meta-top-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: nowrap;
+  gap: 4px;
+  min-height: 28px;
+  height: auto;
+  width: 100%;
+}
+
+.weekday-pill,
+.hijri-pill {
+  font-size: clamp(0.66rem, 2.5vw, 0.78rem);
+  font-weight: 700;
+  color: var(--brass-100);
+  background: rgba(212, 155, 67, 0.12);
+  border: 1px solid rgba(246, 230, 193, 0.22);
+  padding: 2px clamp(5px, 1.8vw, 9px);
+  border-radius: 999px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.hijri-pill {
+  flex-shrink: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.azkar-badge {
+  font-family: "Amiri", serif;
+  font-size: clamp(0.65rem, 2.4vw, 0.76rem);
+  font-weight: 700;
+  color: #ffe8a3;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  flex-shrink: 0;
+  text-shadow: 0 0 8px rgba(255, 232, 163, 0.35);
+}
+
+.azkar-stage {
+  position: relative;
+  width: 100%;
+  min-height: 70px;
+  height: auto;
+  padding: 4px 2px;
+  overflow: visible;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.azkar-glow-orb {
+  position: absolute;
+  width: 130px;
+  height: 45px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 232, 163, 0.22) 0%, transparent 70%);
+  filter: blur(8px);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.azkar-text {
+  position: relative;
+  z-index: 1;
+  font-family: "Amiri", "Noto Naskh Arabic", serif;
+  font-size: clamp(1.08rem, 3.6vw, 1.38rem);
+  font-weight: 700;
+  color: #fff9e6;
+  line-height: 1.55;
+  padding: 2px 4px;
+  text-align: center;
+  text-wrap: balance;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.85);
+  transition: font-size 0.2s ease;
+}
+
+.azkar-text.is-long {
+  font-size: clamp(0.94rem, 3.1vw, 1.16rem);
+  line-height: 1.5;
+}
+
+.azkar-progress-track {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: rgba(255, 255, 255, 0.06);
+  overflow: hidden;
+}
+
+.azkar-progress-bar {
+  width: 0%;
+  height: 100%;
+  background: linear-gradient(90deg, var(--brass-300), var(--brass-100), var(--teal-accent));
+  box-shadow: 0 0 8px rgba(255, 232, 163, 0.6);
+}
+
+/* --------------------------------------------------------------------------
+   ٤.٢ لاکێشەی زیرەکی کاتی ماوە بۆ بانگ (.status-rectangle)
+   -------------------------------------------------------------------------- */
+
+.status-rectangle {
+  position: relative;
+  width: 100%;
+  padding: 10px 14px;
+  background: var(--bg-panel);
+  border: 1px solid var(--brass-border);
+  border-radius: 14px;
+  box-shadow:
+    0 8px 24px rgba(0, 0, 0, 0.65),
+    inset 0 1px 0 rgba(255, 243, 209, 0.1);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  transition: all 0.35s ease;
+}
+
+.status-rectangle.athan-now {
+  background: linear-gradient(135deg, rgba(38, 25, 6, 0.92), rgba(15, 38, 34, 0.92));
+  border-color: var(--brass-200);
+  box-shadow:
+    0 0 25px rgba(255, 232, 163, 0.35),
+    inset 0 0 15px rgba(212, 155, 67, 0.2);
+  animation: athanPulse 1.8s infinite ease-in-out;
+}
+
+@keyframes athanPulse {
+  0%, 100% {
+    box-shadow: 0 0 18px rgba(255, 232, 163, 0.28), inset 0 0 12px rgba(212, 155, 67, 0.15);
+  }
+  50% {
+    box-shadow: 0 0 32px rgba(255, 232, 163, 0.55), inset 0 0 22px rgba(212, 155, 67, 0.32);
+  }
+}
+
+.corner-ornament {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border-color: rgba(255, 232, 163, 0.42);
+  border-style: solid;
+  pointer-events: none;
+}
+
+.corner-ornament.top-right {
+  top: 5px;
+  right: 5px;
+  border-width: 1.5px 1.5px 0 0;
+  border-top-right-radius: 4px;
+}
+
+.corner-ornament.top-left {
+  top: 5px;
+  left: 5px;
+  border-width: 1.5px 0 0 1.5px;
+  border-top-left-radius: 4px;
+}
+
+.corner-ornament.bottom-right {
+  bottom: 5px;
+  right: 5px;
+  border-width: 0 1.5px 1.5px 0;
+  border-bottom-right-radius: 4px;
+}
+
+.corner-ornament.bottom-left {
+  bottom: 5px;
+  left: 5px;
+  border-width: 0 0 1.5px 1.5px;
+  border-bottom-left-radius: 4px;
+}
+
+.status-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.status-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background-color: var(--teal-accent);
+  box-shadow: 0 0 8px var(--teal-accent);
+  animation: dotBlink 2s infinite ease-in-out;
+}
+
+.status-rectangle.athan-now .status-dot {
+  background-color: var(--crimson-alert);
+  box-shadow: 0 0 10px var(--crimson-alert);
+}
+
+@keyframes dotBlink {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.45; transform: scale(0.85); }
+}
+
+.status-title {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.status-main {
+  font-family: "JetBrains Mono", "Noto Naskh Arabic", monospace;
+  font-size: clamp(1.45rem, 5.2vw, 1.85rem);
+  font-weight: 700;
+  color: var(--brass-100);
+  letter-spacing: 0.06em;
+  line-height: 1.2;
+  text-shadow: 0 2px 12px rgba(212, 155, 67, 0.35);
+  text-align: center;
+}
+
+.status-rectangle.athan-now .status-main {
+  font-family: "Noto Naskh Arabic", "Amiri", serif;
+  font-size: clamp(1.15rem, 4.2vw, 1.45rem);
+  letter-spacing: 0;
+  color: #ffe8a3;
+}
+
+.status-footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 0.8rem;
+  color: var(--brass-200);
+}
+
+.status-footer .separator {
+  opacity: 0.45;
+}
+
+#readout {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+/* --------------------------------------------------------------------------
+   ٤.٣ خشتەی ڕۆژانەی کاتەکانی بانگ (.daily-table-card)
+   -------------------------------------------------------------------------- */
+
+.daily-table-card {
+  width: 100%;
+  padding: 10px 12px;
+  background: var(--bg-panel);
+  border: 1px solid var(--brass-border);
+  border-radius: 14px;
+  box-shadow:
+    0 8px 24px rgba(0, 0, 0, 0.65),
+    inset 0 1px 0 rgba(255, 243, 209, 0.08);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+}
+
+.table-header-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  flex-wrap: nowrap;
+  margin-bottom: 8px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid rgba(246, 230, 193, 0.14);
+}
+
+.header-right {
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+#month-title {
+  font-size: clamp(0.84rem, 2.8vw, 1rem);
+  font-weight: 700;
+  color: var(--brass-100);
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.date-label {
+  font-size: 0.76rem;
+  color: var(--text-muted);
+}
+
+.date-badge {
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--brass-200);
+  background: rgba(212, 155, 67, 0.15);
+  border: 1px solid rgba(246, 230, 193, 0.24);
+  padding: 2px 8px;
+  border-radius: 6px;
+}
+
+.prayer-table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.prayer-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 4px;
+  table-layout: fixed;
+  text-align: center;
+}
+
+.prayer-table th {
+  font-size: clamp(0.74rem, 2.5vw, 0.84rem);
+  font-weight: 700;
+  color: var(--brass-200);
+  padding: 4px 2px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 6px;
+}
+
+.prayer-table td {
+  padding: 7px 2px;
+  background: rgba(7, 9, 14, 0.75);
+  border: 1px solid rgba(246, 230, 193, 0.12);
+  border-radius: 8px;
+  transition: all 0.25s ease;
+}
+
+.prayer-table td .p-time {
+  font-family: "JetBrains Mono", monospace;
+  font-size: clamp(0.82rem, 2.8vw, 0.95rem);
+  font-weight: 600;
+  color: var(--brass-100);
+  display: inline-block;
+}
+
+/* بانگی داهاتوو لەناو خشتەکەدا */
+.prayer-table td.active-next {
+  background: linear-gradient(180deg, rgba(45, 212, 191, 0.18), rgba(45, 212, 191, 0.05));
+  border-color: var(--teal-accent);
+  box-shadow: 0 0 12px var(--teal-glow);
+}
+
+.prayer-table td.active-next .p-time {
+  color: #ffffff;
+  font-weight: 700;
+}
+
+/* کاتی بانگدان لەناو خشتەکەدا */
+.prayer-table td.calling-now {
+  background: linear-gradient(180deg, rgba(212, 155, 67, 0.35), rgba(212, 155, 67, 0.12));
+  border-color: var(--brass-200);
+  box-shadow: 0 0 14px rgba(255, 232, 163, 0.45);
+  animation: athanPulse 1.5s infinite ease-in-out;
+}
+
+.prayer-table td.calling-now .p-time {
+  color: #ffe8a3;
+  font-weight: 700;
+}
+
+/* ==========================================================================
+   ٥. خۆگونجاندن لەگەڵ شاشە جیاوازەکان (Responsive Media Queries)
+   ========================================================================== */
+
+@media (max-height: 740px) {
+  .clock-stage .dial {
+    width: min(56vw, 215px);
+    height: min(56vw, 215px);
+  }
+  .prayer-dashboard {
+    gap: 6px;
+    padding-bottom: 10px;
+  }
+  .top-meta-bar {
+    min-height: 98px;
+    padding: 6px 10px 9px;
+  }
+  .azkar-stage {
+    min-height: 56px;
+  }
+  .status-rectangle {
+    padding: 7px 12px;
+  }
+}
+
+@media (max-width: 360px) {
+  .prayer-table {
+    border-spacing: 2px;
+  }
+  .prayer-table td {
+    padding: 6px 1px;
+  }
+}

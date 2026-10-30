@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="ku" dir="rtl" style="background-color: #040507;">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <title>Bang Times</title>
+
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Bang Times" />
+  <meta name="theme-color" content="#040507" />
+
+  <link rel="icon" type="image/jpeg" href="https://i.postimg.cc/zBkHTJ6T/E39555D3-D276-4DA9-B6F6-19FDB5FF7AD8.jpg" />
+  <link rel="shortcut icon" type="image/jpeg" href="https://i.postimg.cc/zBkHTJ6T/E39555D3-D276-4DA9-B6F6-19FDB5FF7AD8.jpg" />
+  <link rel="apple-touch-icon" href="https://i.postimg.cc/zBkHTJ6T/E39555D3-D276-4DA9-B6F6-19FDB5FF7AD8.jpg" />
+  <link rel="manifest" href="manifest.json" />
+
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cinzel:wght@400;600&family=Cormorant+Upright:ital,wght@1,700&family=JetBrains+Mono:wght@400;600;700&family=Noto+Naskh+Arabic:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="app.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+</head>
+<body class="ambient" style="background-color: #040507;">
+
+  <!-- باکگراوندی تەونی جاڵجاڵۆکە لەگەڵ ڕووناکیی هێواش و بەردەوام -->
+  <div class="bg-backdrop" aria-hidden="true">
+    <svg id="bg-spiderweb" class="bg-web-svg" viewBox="0 0 1000 1600" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="webSilkGlow" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#ffe8a3" stop-opacity="0.55" />
+          <stop offset="50%" stop-color="#d49b43" stop-opacity="0.3" />
+          <stop offset="100%" stop-color="#2dd4bf" stop-opacity="0.18" />
+        </linearGradient>
+      </defs>
+
+      <!-- چینی بنەڕەتیی تەونەکە -->
+      <g id="bg-web-base" class="web-base-group"></g>
+
+      <!-- چینی ڕووناکیی هێواش بەناو تەونەکەدا -->
+      <g id="bg-web-glow" class="web-glow-group"></g>
+    </svg>
+  </div>
+
+  <!-- دەزووی هەڵواسینی سەرەوە -->
+  <div class="vline"></div>
+
+  <!-- مینیۆی سێ خەت لە گۆشەی سەرەوەی شاشەکە -->
+  <div class="corner-menu-wrapper">
+    <button id="menu-toggle-btn" class="hamburger-btn" aria-label="لیستی ڕێکخستنەکان" aria-expanded="false">
+      <span class="bar"></span>
+      <span class="bar"></span>
+      <span class="bar"></span>
+    </button>
+
+    <div id="corner-menu-dropdown" class="menu-dropdown-panel">
+      <div class="menu-panel-header">
+        <span class="menu-panel-title">ڕێکخستنێن پڕۆگرامی</span>
+      </div>
+
+      <!-- بەشی هەڵبژاردنی شارەکان -->
+      <div class="menu-option-group">
+        <label for="city-select" class="menu-option-label">هەلبژارتنا باژێری:</label>
+        <select id="city-select" class="city-select">
+          <option value="duhok" selected>دهۆک (Duhok)</option>
+          <option value="hawler">هەولێر (Erbil)</option>
+          <option value="slemani">سلێمانی (Slemani)</option>
+          <option value="kirkok">کەرکووک (Kirkuk)</option>
+          <option value="halabja">هەڵەبجە (Halabja)</option>
+          <option value="zaxo">زاخۆ (Zaxo)</option>
+          <option value="amedi">ئامێدی (Amedi)</option>
+          <option value="akre">ئاکرێ (Akre)</option>
+        </select>
+      </div>
+
+      <!-- بەشی هەڵبژاردنی دەنگی بانگ و دیاریکردنی کاتەکان -->
+      <div class="menu-option-group menu-sound-group">
+        <label class="menu-option-label">هەلبژارتنا دەنگێ بانگی:</label>
+        <div id="custom-sound-container"></div>
+
+        <!-- لیستی دیاریکردنی بانگەکان کە دوای هەڵبژاردنی دەنگ دەکرێتەوە -->
+        <div id="athan-prayers-wrapper" class="athan-prayers-wrapper">
+          <span class="menu-option-label athan-sub-label">دەمێن کارکرنا دەنگێ بانگی:</span>
+          <div id="athan-prayers-list" class="athan-prayers-list"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- دەمژمێری ئەنالۆگ -->
+  <main class="clock-stage" dir="ltr">
+    <svg class="dial" viewBox="-240 -240 480 480" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <radialGradient id="dialWell" cx="50%" cy="45%" r="55%">
+          <stop offset="0%" stop-color="#1d222e" stop-opacity="0.95" />
+          <stop offset="72%" stop-color="#0b0d13" stop-opacity="0.98" />
+          <stop offset="100%" stop-color="#040507" stop-opacity="1" />
+        </radialGradient>
+
+        <radialGradient id="abdomenBronze" cx="38%" cy="35%" r="65%">
+          <stop offset="0%" stop-color="#d8a556" />
+          <stop offset="45%" stop-color="#8f6122" />
+          <stop offset="85%" stop-color="#4a300d" />
+          <stop offset="100%" stop-color="#241604" />
+        </radialGradient>
+
+        <radialGradient id="thoraxBronze" cx="42%" cy="35%" r="60%">
+          <stop offset="0%" stop-color="#c99342" />
+          <stop offset="55%" stop-color="#754d16" />
+          <stop offset="100%" stop-color="#2e1c05" />
+        </radialGradient>
+
+        <linearGradient id="staticLegBronze" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#7a531d" />
+          <stop offset="50%" stop-color="#a67532" />
+          <stop offset="100%" stop-color="#422b0b" />
+        </linearGradient>
+
+        <linearGradient id="brightHandGold" x1="0%" y1="100%" x2="0%" y2="0%">
+          <stop offset="0%" stop-color="#d49b43" />
+          <stop offset="45%" stop-color="#ffe8a3" />
+          <stop offset="85%" stop-color="#fff9e6" />
+          <stop offset="100%" stop-color="#ffffff" />
+        </linearGradient>
+
+        <linearGradient id="secHandGlow" x1="0%" y1="100%" x2="0%" y2="0%">
+          <stop offset="0%" stop-color="#f6e6c1" />
+          <stop offset="60%" stop-color="#ffffff" />
+          <stop offset="100%" stop-color="#ffe082" />
+        </linearGradient>
+
+        <linearGradient id="numeralGold" x1="20%" y1="0%" x2="80%" y2="100%">
+          <stop offset="0%" stop-color="#fff0c7" />
+          <stop offset="50%" stop-color="#d19d4c" />
+          <stop offset="100%" stop-color="#785019" />
+        </linearGradient>
+
+        <linearGradient id="bezelGold" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="#fff3d1" />
+          <stop offset="50%" stop-color="#c8913b" />
+          <stop offset="100%" stop-color="#593a0e" />
+        </linearGradient>
+
+        <filter id="spiderShadow" x="-40%" y="-40%" width="180%" height="180%">
+          <feDropShadow dx="0" dy="8" stdDeviation="6" flood-color="#000000" flood-opacity="0.8" />
+        </filter>
+
+        <filter id="handGlow" x="-50%" y="-50%" width="200%" height="200%">
+          <feDropShadow dx="0" dy="4" stdDeviation="3" flood-color="#000000" flood-opacity="0.95" />
+          <feDropShadow dx="0" dy="0" stdDeviation="2.5" flood-color="#ffe599" flood-opacity="0.45" />
+        </filter>
+
+        <filter id="numShadow" x="-30%" y="-30%" width="160%" height="160%">
+          <feDropShadow dx="0" dy="5" stdDeviation="4" flood-color="#000000" flood-opacity="0.85" />
+        </filter>
+      </defs>
+
+      <circle r="159" fill="url(#dialWell)" stroke="rgba(246, 230, 193, 0.18)" stroke-width="1.2" />
+      <circle r="147.5" fill="none" stroke="rgba(246, 230, 193, 0.1)" stroke-width="0.8" />
+
+      <circle r="153.2"
+        fill="none"
+        stroke="rgba(246, 230, 193, 0.32)"
+        stroke-width="4.3"
+        stroke-dasharray="0.65 14.222"
+      />
+      <circle r="153.2"
+        fill="none"
+        stroke="rgba(246, 230, 193, 0.65)"
+        stroke-width="8.5"
+        stroke-dasharray="0.9 79.31"
+      />
+
+      <g id="gears"></g>
+
+      <!-- بازنەی بەرواری مانگ لەناو دەمژمێر -->
+      <g id="analog-date-window" transform="translate(0, 108)" filter="url(#numShadow)">
+        <circle r="21" fill="#07090e" stroke="url(#bezelGold)" stroke-width="2.2" />
+        <circle r="17.5" fill="none" stroke="rgba(246, 230, 193, 0.28)" stroke-width="0.7" stroke-dasharray="2 2" />
+        <text id="analog-day-number" x="0" y="1"
+              fill="#ffe8a3"
+              font-family="JetBrains Mono, monospace"
+              font-size="16"
+              font-weight="700"
+              text-anchor="middle"
+              dominant-baseline="central">27</text>
+      </g>
+
+      <line x1="0" y1="-240" x2="0" y2="-22" stroke="rgba(246, 230, 193, 0.3)" stroke-width="0.9" />
+
+      <g id="numerals" filter="url(#numShadow)"></g>
+
+      <g id="static-legs" fill="url(#staticLegBronze)" opacity="0.75" filter="url(#spiderShadow)">
+        <path d="M -6 -6 L -24 -26 L -16 -52 L -17.5 -52 L -27 -25 L -8 -2 Z" />
+        <path d="M -8 -1 L -28 -11 L -40 -2 L -39 0 L -26 -8 L -9 2 Z" />
+        <path d="M -7 5 L -24 15 L -16 38 L -14.5 37.5 L -20 16 L -5 8 Z" />
+        <path d="M 6 -6 L 24 -26 L 16 -52 L 17.5 -52 L 27 -25 L 8 -2 Z" />
+        <path d="M 8 -1 L 28 -11 L 40 -2 L 39 0 L 26 -8 L 9 2 Z" />
+        <path d="M 7 5 L 24 15 L 16 38 L 14.5 37.5 L 20 16 L 5 8 Z" />
+      </g>
+
+      <g class="spider-body" filter="url(#spiderShadow)">
+        <path d="M -4 20 Q -8 27 -2.5 32 Q -5 26 -1.5 21 Z" fill="url(#staticLegBronze)" />
+        <path d="M 4 20 Q 8 27 2.5 32 Q 5 26 1.5 21 Z" fill="url(#staticLegBronze)" />
+        <ellipse cx="0" cy="11" rx="9" ry="11" fill="url(#thoraxBronze)" />
+        <path d="M 0 -24
+                 C 11 -24, 15 -13, 14 -1
+                 C 13 7, 7 12, 0 12
+                 C -7 12, -13 7, -14 -1
+                 C -15 -13, -11 -24, 0 -24 Z"
+              fill="url(#abdomenBronze)" />
+      </g>
+
+      <g id="hour" filter="url(#handGlow)">
+        <circle r="56.37" fill="none"/>
+        <path id="hand-hour" fill="url(#brightHandGold)" stroke="#3d2608" stroke-width="0.6"
+          d="M -3.5 10
+             L -4 0
+             L -13 -36
+             L -3.2 -86
+             L -6.5 -92
+             L 0 -110
+             L 6.5 -92
+             L 1.2 -86
+             L -8.2 -36
+             L 4 0
+             L 3.5 10 Z" />
+        <path d="M 0 -88 L -3 -93 L 0 -106 L 3 -93 Z" fill="#ffffff" />
+      </g>
+
+      <g id="min" filter="url(#handGlow)">
+        <circle r="56.37" fill="none"/>
+        <path id="hand-min" fill="url(#brightHandGold)" stroke="#3d2608" stroke-width="0.6"
+          d="M -2.8 14
+             L -3.2 0
+             L 12 -42
+             L 2.5 -118
+             L -4.5 -126
+             L 0 -146
+             L 4.5 -126
+             L -1.2 -118
+             L 7.5 -42
+             L 3.2 0
+             L 2.8 14 Z" />
+        <path d="M 0 -122 L -2.2 -127 L 0 -142 L 2.2 -127 Z" fill="#ffffff" />
+      </g>
+
+      <g id="sec" filter="url(#handGlow)">
+        <circle r="56.37" fill="none"/>
+        <path id="hand-sec" fill="url(#secHandGlow)"
+          d="M -1.5 24
+             L -2.5 16
+             L 0 19
+             L 2.5 16
+             L 1.5 24
+             L -1.6 0
+             L -8 -45
+             L -1.5 -120
+             L 0 -156
+             L 1.2 -120
+             L -4.8 -45
+             L 1.6 0 Z" />
+      </g>
+
+      <g class="center-pivot" filter="url(#handGlow)">
+        <circle cx="0" cy="0" r="6.2" fill="#241604" stroke="#ffe8a3" stroke-width="1.2" />
+        <circle cx="0" cy="0" r="3.6" fill="url(#brightHandGold)" />
+        <circle cx="0" cy="0" r="1.3" fill="#ffffff" />
+      </g>
+    </svg>
+  </main>
+
+  <!-- داشبۆردی کاتەکانی بانگ و ئەزکار -->
+  <section class="prayer-dashboard">
+
+    <!-- ١. لاکێشەی ئەزکار و بەرواری کۆچی -->
+    <div class="top-meta-bar" id="azkar-card">
+      <div class="meta-top-row">
+        <div class="weekday-pill" id="weekday-display">سێشەمب</div>
+        <span class="azkar-badge">✦ أَذْكَارُ الصَّبَاحِ ✦</span>
+        <div class="hijri-pill" id="hijri-display">١٦ی جومادەلئوولا ١٤٤٨ کۆچی</div>
+      </div>
+
+      <div class="azkar-stage">
+        <div class="azkar-glow-orb"></div>
+        <p id="azkar-text" class="azkar-text" dir="rtl">أَسْتَغْفِرُ اللَّهَ الْعَظِيمَ وَأَتُوبُ إِلَيْهِ</p>
+      </div>
+
+      <div class="azkar-progress-track">
+        <div id="azkar-progress-bar" class="azkar-progress-bar"></div>
+      </div>
+    </div>
+
+    <!-- ٢. لاکێشەی زیرەکی بانگ -->
+    <div id="prayer-status-box" class="status-rectangle">
+      <div class="corner-ornament top-right"></div>
+      <div class="corner-ornament top-left"></div>
+      <div class="corner-ornament bottom-right"></div>
+      <div class="corner-ornament bottom-left"></div>
+
+      <div class="status-header">
+        <span class="status-dot" id="status-dot"></span>
+        <span id="status-title" class="status-title">دەمێ مایی بۆ بانگێ داهاتوو</span>
+      </div>
+
+      <div id="status-main" class="status-main" dir="ltr">
+        <span id="countdown-timer">00:00:00</span>
+      </div>
+
+      <div class="status-footer">
+        <span id="next-prayer-label">بانگێ داهاتوو: —</span>
+        <span class="separator">•</span>
+        <time id="readout" dir="ltr">00:00:00</time>
+      </div>
+    </div>
+
+    <!-- ٣. تەیبڵی ئۆتۆماتیکیی ڕۆژانە -->
+    <div class="daily-table-card">
+      <div class="table-header-bar">
+        <div class="header-right">
+          <h2 id="month-title">Bang Times</h2>
+        </div>
+        <div class="header-left">
+          <span class="date-label">بەروار:</span>
+          <span id="today-date-badge" class="date-badge" dir="ltr">--/--</span>
+        </div>
+      </div>
+
+      <div class="prayer-table-wrapper">
+        <table class="prayer-table">
+          <thead>
+            <tr>
+              <th>سپێدە</th>
+              <th>نیڤرۆ</th>
+              <th>ئێڤاری</th>
+              <th>مەغرەب</th>
+              <th>عەیشا</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr id="today-prayer-row">
+              <td data-prayer="fajr" id="cell-fajr">
+                <span class="p-time" dir="ltr">--:--</span>
+              </td>
+              <td data-prayer="dhuhr" id="cell-dhuhr">
+                <span class="p-time" dir="ltr">--:--</span>
+              </td>
+              <td data-prayer="asr" id="cell-asr">
+                <span class="p-time" dir="ltr">--:--</span>
+              </td>
+              <td data-prayer="maghrib" id="cell-maghrib">
+                <span class="p-time" dir="ltr">--:--</span>
+              </td>
+              <td data-prayer="isha" id="cell-isha">
+                <span class="p-time" dir="ltr">--:--</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- بانگکردنی فایلەکانی کاتەکانی بانگ و دەنگەکان پێش app.js -->
+  <script src="duhok.js"></script>
+  <script src="hawler.js"></script>
+  <script src="slemani.js"></script>
+  <script src="kirkok.js"></script>
+  <script src="halabja.js"></script>
+  <script src="zaxo.js"></script>
+  <script src="amedi.js"></script>
+  <script src="akre.js"></script>
+  <script src="sounds.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
